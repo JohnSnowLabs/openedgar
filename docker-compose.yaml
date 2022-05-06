@@ -30,6 +30,10 @@ services:
                         - rabbitmq_log:/var/log/rabbitmq
                 networks:
                         - djangonetwork
+                environment:
+                        RABBITMQ_DEFAULT_USER: openedgar
+                        RABBITMQ_DEFAULT_PASS: openedgar
+                        RABBITMQ_DEFAULT_VHOST: openedgar
 
         openedgar:
                 image: openedgar
