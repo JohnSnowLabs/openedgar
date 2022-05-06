@@ -71,14 +71,16 @@ def download_filing_index_data(year: int = None):
 
     # Now iterate through list to check if already on S3
     for filing_index_path in filing_index_list:
+        logger.info(msg="Checking {}".format(filing_index_path))
         # Cleanup path
         if filing_index_path.startswith("/Archives/"):
             file_path = os.path.join(path_prefix, filing_index_path[len("/Archives/"):])
         else:
             file_path = os.path.join(path_prefix, filing_index_path)
-
+        
         # Check if exists in database
         try:
+            logger.info(msg="Checking if {} exists in DB ".format(filing_index_path))
             filing_index = FilingIndex.objects.get(edgar_url=filing_index_path)
             is_processed = filing_index.is_processed
             logger.info("Index {0} already exists in DB.".format(filing_index_path))
