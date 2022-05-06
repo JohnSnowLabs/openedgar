@@ -178,7 +178,7 @@ def list_index_by_year(year: int):
     # Get year directory list
     year_index_uri = urllib.parse.urljoin(HTTP_SEC_INDEX_PATH, str(year) + "/")
     year_root_list = list_path(year_index_uri)
-    print(year_root_list)
+    logger.info(year_root_list)
 
     # Get quarters
     quarter_list = [f for f in year_root_list if "/QTR" in f]
