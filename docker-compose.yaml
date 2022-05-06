@@ -1,0 +1,78 @@
+version: "3.2"
+
+services:
+        db:
+                image: postgres:latest
+                ports:
+                        - 5432:5432
+                environment:
+                        POSTGRES_USER: openedgar
+                        POSTGRES_PASSWORD: openedgar
+                        POSTGRES_DB: openedgar
+                networks:
+                        - djangonetwork
+                healthcheck:
+                        test: ["CMD-SHELL", "pg_isready -U openedgar"]
+                        interval: 5s
+                        timeout: 5s
+                        retries: 5
+                volumes:
+                        - db-data:/var/lib/postgresql/data
+
+
+        rabbitmq:
+                image: rabbitmq:3-management-alpine
+                ports:
+                        - 5672:5672
+                        - 15672:15672
+                volumes:
+                        - rabbitmq_data:/var/lib/rabbitmq/
+                        - rabbitmq_log:/var/log/rabbitmq
+                networks:
+                        - djangonetwork
+
+        openedgar:
+                image: openedgar
+                depends_on:
+                        db:
+                                condition: service_healthy
+                ports:
+                        - 8000:8000
+                links:
+                        - db:db
+                        - rabbitmq
+                networks:
+                        - djangonetwork
+      
+        pgadmin:
+                image: dpage/pgadmin4
+                container_name: pgadmin4
+                ports:
+                        - 3333:80
+                environment:
+                        PGADMIN_DEFAULT_EMAIL: juan@johnsnowlabs.com
+                        PGADMIN_DEFAULT_PASSWORD: changeme
+                links:
+                        - db:db
+                networks:
+                        - djangonetwork
+
+        adminer:
+                image: adminer
+                restart: always
+                ports:
+                        - 8080:8080
+                links:
+                        - db:db
+                networks:
+                        - djangonetwork
+
+networks:
+        djangonetwork:
+                driver: bridge
+
+volumes:
+        rabbitmq_data:
+        rabbitmq_log:
+        db-data:
+
