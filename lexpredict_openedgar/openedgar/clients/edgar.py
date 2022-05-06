@@ -37,6 +37,13 @@ from typing import Union
 
 from config.settings.base import HTTP_SEC_HOST, HTTP_FAIL_SLEEP, HTTP_SEC_INDEX_PATH, HTTP_SLEEP_DEFAULT
 
+# Random string
+import random
+import string
+
+def random_char(char_num):
+       return ''.join(random.choice(string.ascii_letters) for _ in range(char_num))
+    
 # Setup logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -69,7 +76,14 @@ def get_buffer(remote_path: str, base_path: str = HTTP_SEC_HOST):
     while not complete:
         try:
             with requests.Session() as s:
-                r = s.get(remote_uri)
+                email = random_char(7) + '@' + random_char(10) + '.com'
+                headers = {
+                    'User-Agent': random_char(15) + ' ' + email,
+                    'From': email,
+                    'Accept-Encoding': 'gzip, deflate',
+                    'Host': 'www.sec.gov'
+                }
+                r = s.get(remote_uri, headers=headers)
                 if 'Last-Modified' in r.headers:
                     try:
                         last_modified_date = dateutil.parser.parse(r.headers['Last-Modified']).date()
