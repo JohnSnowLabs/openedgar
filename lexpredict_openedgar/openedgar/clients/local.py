@@ -44,6 +44,7 @@ class LocalClient:
 
     def put_buffer(self, file_path: str, buffer, write_bytes=True):
         dir_name = os.path.dirname(file_path)
+        logger.info(f"Put buffer: {file_path}")
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
         if write_bytes:
@@ -54,5 +55,6 @@ class LocalClient:
             localfile.write(buffer)
 
     def get_buffer(self, file_path: str):
+        logger.info(f"Get buffer: {file_path}")
         with open(file_path, mode='rb') as localfile:
             return localfile.read()
