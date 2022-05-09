@@ -74,6 +74,7 @@ def create_filing_documents(client, documents, filing, store_raw: bool = True, s
     # Iterate through documents
     document_records = []
     for document in documents:
+        logger.info("create_filing_documents for document {} with store_raw= and store_text={}".format(document["file_name"], store_raw, store_text))
         # Create DB object
         filing_doc = FilingDocument()
         filing_doc.filing = filing
@@ -91,6 +92,7 @@ def create_filing_documents(client, documents, filing, store_raw: bool = True, s
 
         # Upload raw if requested
         if store_raw and len(document["content"]) > 0:
+            logger.info("- Starting to process store_raw...")
             raw_path = pathlib.Path(S3_DOCUMENT_PATH, "raw", document["sha1"]).as_posix()
             if not client.path_exists(raw_path):
                 client.put_buffer(raw_path, document["content"])
@@ -102,6 +104,7 @@ def create_filing_documents(client, documents, filing, store_raw: bool = True, s
 
         # Upload text to S3 if requested
         if store_text and document["content_text"] is not None:
+            logger.info("- Starting to process store_text...")
             raw_path = pathlib.Path(S3_DOCUMENT_PATH, "text", document["sha1"]).as_posix()
             if not client.path_exists(raw_path):
                 client.put_buffer(raw_path, document["content_text"], write_bytes=False)
@@ -112,6 +115,7 @@ def create_filing_documents(client, documents, filing, store_raw: bool = True, s
                             .format(filing, document["sequence"], document["sha1"]))
 
     # Create in bulk
+    logger.info("Triggering bulk_create with all document records...")
     FilingDocument.objects.bulk_create(document_records)
     return len(document_records)
 
