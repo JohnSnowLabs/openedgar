@@ -12,7 +12,7 @@ RUN apt -y install openjdk-8-jdk
 RUN apt -y install git
 RUN apt -y install vim
 
-RUN echo "Building OpenEdgar from source.."
+RUN echo "Building OpenEdgar from source............."
 RUN cd /opt && git clone https://github.com/josejuanmartinez/openedgar.git
 RUN cd /opt/openedgar && virtualenv -p /usr/bin/python3 env
 RUN cd /opt/openedgar && ./env/bin/pip install -r lexpredict_openedgar/requirements/full.txt
@@ -22,3 +22,4 @@ COPY entrypoint.sh /opt/openedgar/entrypoint.sh
 RUN chmod a+x /opt/openedgar/entrypoint.sh
 EXPOSE 8000
 ENTRYPOINT ["/opt/openedgar/entrypoint.sh"]
+WORKDIR /opt/openedgar

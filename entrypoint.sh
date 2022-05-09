@@ -10,10 +10,6 @@ cd /opt/openedgar/tika
 bash download_tika.sh
 bash run_tika.sh &
 echo "TIKA prepared"
-echo "Preparing Celery"
+echo "Running Celery [FINAL STEP]"
 cd /opt/openedgar/lexpredict_openedgar
-bash scripts/run_celery.sh &
-echo "CELERY prepared"
-echo "*********************SUCCESSFULLY PREPARED: LAUNCHING SERVER*****************"
-python3 manage.py runserver 0.0.0.0:8000
-echo "*********************************STOPPED*************************************"
+bash /opt/openedgar/lexpredict_openedgar/scripts/run_celery.sh
