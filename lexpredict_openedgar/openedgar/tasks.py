@@ -74,7 +74,7 @@ def create_filing_documents(client, documents, filing, store_raw: bool = True, s
     # Iterate through documents
     document_records = []
     for document in documents:
-        logger.info("create_filing_documents for document {} with store_raw= and store_text={}".format(document["file_name"], store_raw, store_text))
+        logger.info("create_filing_documents for document {} with store_raw={} and store_text={}".format(document["file_name"], store_raw, store_text))
         # Create DB object
         filing_doc = FilingDocument()
         filing_doc.filing = filing
