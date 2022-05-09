@@ -239,7 +239,8 @@ def parse_filing(buffer: Union[bytes, str], extract: bool = False):
                    "sic": None,
                    "irs_number": None,
                    "state_incorporation": None,
-                   "state_location": None}
+                   "state_location": None,
+                   "business_address": None}
 
     # Typing
     if isinstance(buffer, bytes):
@@ -308,6 +309,12 @@ def parse_filing(buffer: Union[bytes, str], extract: bool = False):
             filing_data["irs_number"] = extract_filing_header_field(header, "IRS NUMBER")
             filing_data["state_incorporation"] = extract_filing_header_field(header, "STATE OF INCORPORATION")
             filing_data["state_location"] = extract_filing_header_field(header, "STATE")
+            ba_1 = extract_filing_header_field(header, "STREET 1")
+            ba_2 = extract_filing_header_field(header, "CITY")
+            ba_3 = extract_filing_header_field(header, "STATE")
+            ba_4 = extract_filing_header_field(header, "ZIP")
+            ba_5 = extract_filing_header_field(header, "BUSINESS_PHONE")
+            filing_data['business_address'] = "\n".join([ba_1, ba_2, ba_3, ba_4, ba_5])
 
     # Parse and yield by doc
     p0 = buffer.find(start_tag)
