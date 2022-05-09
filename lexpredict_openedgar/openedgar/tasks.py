@@ -413,7 +413,8 @@ def process_filing(client, file_path: str, filing_buffer: Union[str, bytes] = No
 
     # Create filing document records
     try:
-        create_filing_documents(client, filing_data["documents"], filing, store_raw=store_raw, store_text=store_text)
+        #create_filing_documents(client, filing_data["documents"], filing, store_raw=store_raw, store_text=store_text)
+        create_filing_documents(client, filing_data["documents"], filing, store_raw=False, store_text=False)
         filing.is_processed = True
         filing.is_error = False
         filing.save()
