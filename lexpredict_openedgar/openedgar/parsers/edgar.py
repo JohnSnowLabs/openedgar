@@ -240,7 +240,13 @@ def parse_filing(buffer: Union[bytes, str], extract: bool = False):
                    "irs_number": None,
                    "state_incorporation": None,
                    "state_location": None,
-                   "business_address": None}
+                   "business_street": None,
+                   "business_city": None,
+                   "business_state": None,
+                   "business_zip": None,
+                   "business_phone": None,
+                   "former_name": None,
+                   "former_name_date": None}
 
     # Typing
     if isinstance(buffer, bytes):
@@ -310,43 +316,53 @@ def parse_filing(buffer: Union[bytes, str], extract: bool = False):
             filing_data["state_incorporation"] = extract_filing_header_field(header, "STATE OF INCORPORATION")
             filing_data["state_location"] = extract_filing_header_field(header, "STATE")
             try:
-                ba_1 = None
-                ba_1 = extract_filing_header_field(header, "STREET 1")
-                logger.info("STREET 1: {}".format(ba_1))
+                filing_data["business_street"] = None
+                filing_data["business_street"] = extract_filing_header_field(header, "STREET 1")
             except:
                 logger.error("STREET 1 not found for {}".format(filing_data["company_name"]))
             
             try:
-                ba_2 = None
-                ba_2 = extract_filing_header_field(header, "CITY")
-                logger.info("CITY: {}".format(ba_2))
+                filing_data["business_city"] = None
+                filing_data["business_city"] = extract_filing_header_field(header, "CITY")
             except:
                 logger.error("CITY not found for {}".format(filing_data["company_name"]))
             
             try:
-                ba_3 = None
-                ba_3 = extract_filing_header_field(header, "STATE")
-                logger.info("STATE: {}".format(ba_3))
+                filing_data["business_state"] = None
+                filing_data["business_state"] = extract_filing_header_field(header, "STATE")
             except:
                 logger.error("STATE not found for {}".format(filing_data["company_name"]))
             
             try:
-                ba_4 = None
-                ba_4 = extract_filing_header_field(header, "ZIP")
-                logger.info("ZIP: {}".format(ba_4))
+                filing_data["business_zip"] = None
+                filing_data["business_zip"] = extract_filing_header_field(header, "ZIP")
             except:
                 logger.error("ZIP not found for {}".format(filing_data["company_name"]))
             
             try:
-                ba_5 = None
-                ba_5 = extract_filing_header_field(header, "BUSINESS PHONE")
-                logger.info("BUSINESS_PHONE: {}".format(ba_5))
+                filing_data["business_phone"] = None
+                filing_data["business_phone"]  = extract_filing_header_field(header, "BUSINESS PHONE")                
             except:
-                logger.error("BUSINESS_PHONE not found for {}".format(filing_data["company_name"]))
+                logger.error("BUSINESS PHONE not found for {}".format(filing_data["company_name"]))
             
-            ba_list = [ba_1, ba_2, ba_3, ba_4, ba_5]
-            ba_data = [x for x in ba_list if x is not None]
-            filing_data['business_address'] = "\n".join(ba_data) if len(ba_data)>0 else ''
+            
+            try:
+                filing_data["former_name"] = None
+                filing_data["former_name"]  = extract_filing_header_field(header, "FORMER CONFORMED NAME")                
+            except:
+                logger.info("FORMER CONFORMED NAME not found for {}".format(filing_data["company_name"]))           
+            
+            
+            try:
+                filing_data["former_name_date"] = None
+                former_name_date_value = extract_filing_header_field(header, "DATE OF NAME CHANGE")                
+                filing_data["former_name_date"] = dateutil.parser.parse(
+                    former_name_date_value).date() if former_name_date_value is not None else None
+            except ValueError as _:
+                logger.error("Unable to set date_filed for DATE OF NAME CHANGE")
+            except:
+                logger.info("DATE OF NAME CHANGE not found for {}".format(filing_data["company_name"]))
+            
 
     # Parse and yield by doc
     p0 = buffer.find(start_tag)
