@@ -339,7 +339,7 @@ def parse_filing(buffer: Union[bytes, str], extract: bool = False):
             
             try:
                 ba_5 = None
-                ba_5 = extract_filing_header_field(header, "BUSINESS_PHONE")
+                ba_5 = extract_filing_header_field(header, "BUSINESS PHONE")
                 logger.info("BUSINESS_PHONE: {}".format(ba_5))
             except:
                 logger.error("BUSINESS_PHONE not found for {}".format(filing_data["company_name"]))
