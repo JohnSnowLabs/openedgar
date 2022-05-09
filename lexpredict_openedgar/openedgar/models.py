@@ -58,7 +58,13 @@ class CompanyInfo(django.db.models.Model):
     sic = django.db.models.CharField(max_length=1024, db_index=True, null=True)
     state_location = django.db.models.CharField(max_length=32, db_index=True, null=True)
     state_incorporation = django.db.models.CharField(max_length=32, db_index=True, null=True)
-    business_address = django.db.models.CharField(max_length=1024, null=True)
+    business_street = django.db.models.CharField(max_length=1024, null=True)
+    business_city = django.db.models.CharField(max_length=1024, null=True)
+    business_state = django.db.models.CharField(max_length=1024, null=True)
+    business_zip = django.db.models.CharField(max_length=1024, null=True)
+    business_phone = django.db.models.CharField(max_length=1024, null=True)
+    former_name = django.db.models.CharField(max_length=1024, null=True)
+    former_name_date = django.db.models.DateField(default=django.utils.timezone.now, db_index=True)
     date = django.db.models.DateField(default=django.utils.timezone.now, db_index=True)
 
     def __str__(self):
