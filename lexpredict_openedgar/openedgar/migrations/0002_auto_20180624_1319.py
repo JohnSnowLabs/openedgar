@@ -30,6 +30,7 @@ class Migration(migrations.Migration):
                 ('state_incorporation', models.CharField(db_index=True, max_length=32, null=True)),
                 ('business_street', models.CharField(max_length=1024, null=True)),
                 ('business_city', models.CharField(max_length=1024, null=True)),
+                ('business_state', models.CharField(max_length=1024, null=True)),
                 ('business_zip', models.CharField(max_length=1024, null=True)),
                 ('business_phone', models.CharField(max_length=1024, null=True)),
                 ('former_name', models.CharField(max_length=1024, null=True)),
