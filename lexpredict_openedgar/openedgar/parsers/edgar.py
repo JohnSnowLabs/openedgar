@@ -309,12 +309,44 @@ def parse_filing(buffer: Union[bytes, str], extract: bool = False):
             filing_data["irs_number"] = extract_filing_header_field(header, "IRS NUMBER")
             filing_data["state_incorporation"] = extract_filing_header_field(header, "STATE OF INCORPORATION")
             filing_data["state_location"] = extract_filing_header_field(header, "STATE")
-            ba_1 = extract_filing_header_field(header, "STREET 1")
-            ba_2 = extract_filing_header_field(header, "CITY")
-            ba_3 = extract_filing_header_field(header, "STATE")
-            ba_4 = extract_filing_header_field(header, "ZIP")
-            ba_5 = extract_filing_header_field(header, "BUSINESS_PHONE")
-            filing_data['business_address'] = "\n".join([ba_1, ba_2, ba_3, ba_4, ba_5])
+            try:
+                ba_1 = None
+                ba_1 = extract_filing_header_field(header, "STREET 1")
+                logger.info("STREET 1: {}".format(ba_1))
+            except:
+                logger.error("STREET 1 not found for {}".format(filing_data["company_name"]))
+            
+            try:
+                ba_2 = None
+                ba_2 = extract_filing_header_field(header, "CITY")
+                logger.info("CITY: {}".format(ba_2))
+            except:
+                logger.error("CITY not found for {}".format(filing_data["company_name"]))
+            
+            try:
+                ba_3 = None
+                ba_3 = extract_filing_header_field(header, "STATE")
+                logger.info("STATE: {}".format(ba_3))
+            except:
+                logger.error("STATE not found for {}".format(filing_data["company_name"]))
+            
+            try:
+                ba_4 = None
+                ba_4 = extract_filing_header_field(header, "ZIP")
+                logger.info("ZIP: {}".format(ba_4))
+            except:
+                logger.error("ZIP not found for {}".format(filing_data["company_name"]))
+            
+            try:
+                ba_5 = None
+                ba_5 = extract_filing_header_field(header, "BUSINESS_PHONE")
+                logger.info("BUSINESS_PHONE: {}".format(ba_5))
+            except:
+                logger.error("BUSINESS_PHONE not found for {}".format(filing_data["company_name"]))
+            
+            ba_list = [ba_1, ba_2, ba_3, ba_4, ba_5]
+            ba_data = [x for x in ba_list if x is not None]
+            filing_data['business_address'] = "\n".join(ba_data) if len(ba_data)>0 else ''
 
     # Parse and yield by doc
     p0 = buffer.find(start_tag)
