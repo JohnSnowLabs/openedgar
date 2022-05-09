@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/LexPredict/openedgar.svg?branch=1.0.0)](https://travis-ci.com/LexPredict/openedgar) [![Coverage Status](https://coveralls.io/repos/github/LexPredict/openedgar/badge.svg?branch=1.0.0)](https://coveralls.io/github/LexPredict/openedgar?branch=1.0.0) [![](https://tokei.rs/b1/github/lexpredict/openedgar?category=code)](https://github.com/lexpredict/openedgar)
 
 ![Logo](https://github.com/LexPredict/openedgar/blob/1.0.0/lexpredict_openedgar_logo_horizontal_1_tight.png?raw=true)
-# [OpenEDGAR](openedgar.io) by [LexPredict](https://lexpredict.com)
+# [OpenEDGAR](openedgar.io) is a a project intially build by [LexPredict](https://lexpredict.com) that was later on discontinued, and forked-fixed-maintained-augmented by [John Snow Labs](https://johnsnowlabs.com)
 
 OpenEDGAR is a comprehensive framework for building databases from EDGAR, and can automate the retrieval and parsing of EDGAR forms.  OpenEDGAR uses the same software that powers many of our data products, including the [LexPredict Agreement Database](https://agreementdatabase.com).  
 
@@ -11,10 +11,9 @@ As with our pioneering [ContraxSuite](https://contraxsuite.com) contract analyti
 * Installation Guide: [INSTALL.md](INSTALL.md)
 
 # Related Information
-* Official Website: https://openedgar.io/
+* Official Website: https://law.mit.edu/pub/openedgar/release/1 and https://github.com/LexPredict/openedgar
 * LexPredict: https://lexpredict.com/
 * ContraxSuite: https://contraxsuite.com/
-* Documentation: (in progress)
 * Contact: support@contraxsuite.com
 
 ## Licensing, Support, and Customization
