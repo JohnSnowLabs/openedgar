@@ -365,6 +365,7 @@ def process_filing(client, file_path: str, filing_buffer: Union[str, bytes] = No
             company_info.date = filing_data["date_filed"].date() if isinstance(filing_data["date_filed"],
                                                                                datetime.datetime) else \
                 filing_data["date_filed"]
+            company_info.business_address = filing_data["business_address"]
             company_info.save()
 
             logger.info("Created new company info record.")
@@ -389,6 +390,7 @@ def process_filing(client, file_path: str, filing_buffer: Union[str, bytes] = No
                 company_info.state_incorporation = filing_data["state_incorporation"]
                 company_info.state_location = filing_data["state_location"]
                 company_info.date = filing_data["date_filed"]
+                company_info.business_address = filing_data["business_address"]
                 company_info.save()
         except django.db.utils.IntegrityError:
             company = Company.objects.get(cik=filing_data["cik"])
