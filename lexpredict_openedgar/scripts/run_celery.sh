@@ -1,3 +1,3 @@
 source ../env/bin/activate
 source .env
-celery -A lexpredict_openedgar.taskapp worker --loglevel=ERROR -f celery.log -c16
+C_FORCE_ROOT=1 celery -A lexpredict_openedgar.taskapp worker --loglevel=ERROR -f celery.log -c16
