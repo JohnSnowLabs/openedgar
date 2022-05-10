@@ -12,7 +12,7 @@ RUN apt -y install openjdk-8-jdk
 RUN apt -y install git
 RUN apt -y install vim
 
-RUN echo "Building OpenEdgar from source............."
+RUN echo "Building OpenEdgar from source.............."
 COPY ./ /opt/openedgar
 #RUN cd /opt && git clone https://github.com/josejuanmartinez/openedgar.git
 RUN cd /opt/openedgar && virtualenv -p /usr/bin/python3 env

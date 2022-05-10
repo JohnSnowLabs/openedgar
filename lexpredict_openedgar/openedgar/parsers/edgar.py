@@ -336,7 +336,7 @@ def parse_filing(buffer: Union[bytes, str], extract: bool = False):
             filing_data["sic"] = extract_filing_header_field(header, "STANDARD INDUSTRIAL CLASSIFICATION")
 
             try:
-                filing_data["sic_code"] = re.findall(r'[(\d+)]', filing_data["sic"])[0]
+                filing_data["sic_code"] = "".join(re.findall(r'[(\d+)]', filing_data["sic"]))
             except Exception as e:
                 logger.warning("Unable to find sic_code. Error: {}".format(e))
 

@@ -22,5 +22,6 @@ alternative licensing, requires support, or is interested in customization, plea
 
 
 ## Releases
+* 1.0.1: May 2021 - Resurrection fork by John Snow labs
 * 1.0.0: May 2018 - First public release; [code](https://github.com/LexPredict/openedgar/tree/1.0.0)
 

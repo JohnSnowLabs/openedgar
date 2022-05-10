@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('sic', models.CharField(db_index=True, max_length=1024, null=True)),
                 ('sic_code', models.IntegerField(db_index=True, null=True)),
                 ('irs_number', models.IntegerField(db_index=True, null=True)),
-                ('fiscal_year_end', models.IntegerField(null=True)),
+                ('fiscal_year_end', models.CharField(max_length=1024, null=True)),
                 ('state_location', models.CharField(db_index=True, max_length=32, null=True)),
                 ('state_incorporation', models.CharField(db_index=True, max_length=32, null=True)),
                 ('business_street', models.CharField(max_length=1024, null=True)),

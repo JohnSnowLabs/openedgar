@@ -58,7 +58,7 @@ class CompanyInfo(django.db.models.Model):
     sic = django.db.models.CharField(max_length=1024, db_index=True, null=True)
     sic_code = django.db.models.IntegerField(db_index=True, null=True)
     irs_number = django.db.models.IntegerField(db_index=True, null=True)
-    fiscal_year_end = django.db.models.IntegerField(null=True)
+    fiscal_year_end = django.db.models.CharField(max_length=1024, null=True)
     state_location = django.db.models.CharField(max_length=32, db_index=True, null=True)
     state_incorporation = django.db.models.CharField(max_length=32, db_index=True, null=True)
     business_street = django.db.models.CharField(max_length=1024, null=True)
