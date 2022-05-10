@@ -20,6 +20,5 @@ RUN cd /opt/openedgar && ./env/bin/pip install -r lexpredict_openedgar/requireme
 COPY sample.env /opt/openedgar/lexpredict_openedgar/.env
 COPY entrypoint.sh /opt/openedgar/entrypoint.sh
 RUN chmod a+x /opt/openedgar/entrypoint.sh
-EXPOSE 8000
 ENTRYPOINT ["/opt/openedgar/entrypoint.sh"]
 WORKDIR /opt/openedgar
