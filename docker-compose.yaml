@@ -36,7 +36,7 @@ services:
                         RABBITMQ_DEFAULT_VHOST: openedgar
 
         openedgar:
-                image: openedgar
+                image: jjmcarrascosa/openedgar
                 depends_on:
                         db:
                                 condition: service_healthy
