@@ -1,7 +1,9 @@
 [![Build Status](https://travis-ci.com/LexPredict/openedgar.svg?branch=1.0.0)](https://travis-ci.com/LexPredict/openedgar) [![Coverage Status](https://coveralls.io/repos/github/LexPredict/openedgar/badge.svg?branch=1.0.0)](https://coveralls.io/github/LexPredict/openedgar?branch=1.0.0) [![](https://tokei.rs/b1/github/lexpredict/openedgar?category=code)](https://github.com/lexpredict/openedgar)
 
-![Logo](https://github.com/LexPredict/openedgar/blob/1.0.0/lexpredict_openedgar_logo_horizontal_1_tight.png?raw=true)
-# [OpenEDGAR](openedgar.io) is a a project intially build by [LexPredict](https://lexpredict.com) that was later on discontinued, and forked-fixed-maintained-augmented by [John Snow Labs](https://johnsnowlabs.com)
+![Logo](https://github.com/josejuanmartinez/openedgar/raw/master/lexpredict_openedgar_logo_horizontal_1_tight.png?raw=True)
+![Logo](https://github.com/josejuanmartinez/openedgar/raw/master/jsl.png?raw=True)
+
+[OpenEDGAR](openedgar.io) is a project intially build by [LexPredict](https://lexpredict.com) that was later on discontinued, and forked-fixed-maintained-augmented by [John Snow Labs](https://johnsnowlabs.com)
 
 OpenEDGAR is a comprehensive framework for building databases from EDGAR, and can automate the retrieval and parsing of EDGAR forms.  OpenEDGAR uses the same software that powers many of our data products, including the [LexPredict Agreement Database](https://agreementdatabase.com).  
 
