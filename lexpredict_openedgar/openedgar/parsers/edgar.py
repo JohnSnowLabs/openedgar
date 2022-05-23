@@ -218,6 +218,26 @@ def extract_filing_header_field(buffer: Union[bytes, str], field: str):
     return buffer[p0:p1].strip()
 
 
+def extract_filing_header_fields(buffer: Union[bytes, str], field: str):
+    """
+    Extracts a given field that can be repeated from an SEC-HEADER buffer.
+    :param buffer: SEC-HEADER buffer
+    :param field: field to extract
+    :return:
+    """
+
+    start_pos = 0
+    while True:
+        field_string = "{0}:".format(field)
+        if buffer.find(field_string, start_pos) == -1:
+            return
+
+        p0 = buffer.find(field_string, start_pos) + len(field_string)
+        p1 = buffer.find("\n", p0)
+        yield buffer[p0:p1].strip()
+        start_pos = p1
+
+
 def parse_filing(buffer: Union[bytes, str], extract: bool = False):
     """
     Parse a filing file by returning each document within
@@ -237,7 +257,9 @@ def parse_filing(buffer: Union[bytes, str], extract: bool = False):
                    "company_name": None,
                    "cik": None,
                    "sic": None,
+                   "sic_code": None,
                    "irs_number": None,
+                   "fiscal_year_end": None,
                    "state_incorporation": None,
                    "state_location": None,
                    "business_street": None,
@@ -312,57 +334,31 @@ def parse_filing(buffer: Union[bytes, str], extract: bool = False):
             filing_data["company_name"] = extract_filing_header_field(header, "COMPANY CONFORMED NAME")
             filing_data["cik"] = extract_filing_header_field(header, "CENTRAL INDEX KEY")
             filing_data["sic"] = extract_filing_header_field(header, "STANDARD INDUSTRIAL CLASSIFICATION")
+
+            try:
+                filing_data["sic_code"] = "".join(re.findall(r'[(\d+)]', filing_data["sic"]))
+            except Exception as e:
+                logger.warning("Unable to find sic_code. Error: {}".format(e))
+
             filing_data["irs_number"] = extract_filing_header_field(header, "IRS NUMBER")
+            filing_data["fiscal_year_end"] = extract_filing_header_field(header, "FISCAL YEAR END")
+
             filing_data["state_incorporation"] = extract_filing_header_field(header, "STATE OF INCORPORATION")
             filing_data["state_location"] = extract_filing_header_field(header, "STATE")
-            try:
-                filing_data["business_street"] = None
-                filing_data["business_street"] = extract_filing_header_field(header, "STREET 1")
-            except:
-                logger.error("STREET 1 not found for {}".format(filing_data["company_name"]))
-            
-            try:
-                filing_data["business_city"] = None
-                filing_data["business_city"] = extract_filing_header_field(header, "CITY")
-            except:
-                logger.error("CITY not found for {}".format(filing_data["company_name"]))
-            
-            try:
-                filing_data["business_state"] = None
-                filing_data["business_state"] = extract_filing_header_field(header, "STATE")
-            except:
-                logger.error("STATE not found for {}".format(filing_data["company_name"]))
-            
-            try:
-                filing_data["business_zip"] = None
-                filing_data["business_zip"] = extract_filing_header_field(header, "ZIP")
-            except:
-                logger.error("ZIP not found for {}".format(filing_data["company_name"]))
-            
-            try:
-                filing_data["business_phone"] = None
-                filing_data["business_phone"]  = extract_filing_header_field(header, "BUSINESS PHONE")                
-            except:
-                logger.error("BUSINESS PHONE not found for {}".format(filing_data["company_name"]))
-            
-            
-            try:
-                filing_data["former_name"] = None
-                filing_data["former_name"]  = extract_filing_header_field(header, "FORMER CONFORMED NAME")                
-            except:
-                logger.info("FORMER CONFORMED NAME not found for {}".format(filing_data["company_name"]))           
-            
-            
-            try:
-                filing_data["former_name_date"] = None
-                former_name_date_value = extract_filing_header_field(header, "DATE OF NAME CHANGE")                
-                filing_data["former_name_date"] = dateutil.parser.parse(
-                    former_name_date_value).date() if former_name_date_value is not None else None
-            except ValueError as _:
-                logger.error("Unable to set date_filed for DATE OF NAME CHANGE")
-            except:
-                logger.info("DATE OF NAME CHANGE not found for {}".format(filing_data["company_name"]))
-            
+
+            filing_data["business_street"] = extract_filing_header_field(header, "STREET 1")
+            filing_data["business_city"] = extract_filing_header_field(header, "CITY")
+            filing_data["business_state"] = extract_filing_header_field(header, "STATE")
+            filing_data["business_zip"] = extract_filing_header_field(header, "ZIP")
+            filing_data["business_phone"] = extract_filing_header_field(header, "BUSINESS PHONE")
+
+            former_name = [x for x in extract_filing_header_fields(header, "FORMER CONFORMED NAME")]
+            if len(former_name) > 0:
+                filing_data["former_name"] = "\n".join(former_name)
+
+            former_name_date = [x for x in extract_filing_header_fields(header, "DATE OF NAME CHANGE")]
+            if len(former_name_date) > 0:
+                filing_data["former_name_date"] = "\n".join(former_name_date)
 
     # Parse and yield by doc
     p0 = buffer.find(start_tag)

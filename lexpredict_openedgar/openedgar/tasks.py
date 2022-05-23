@@ -58,7 +58,7 @@ console.setFormatter(formatter)
 logger.addHandler(console)
 
 
-def create_filing_documents(client, documents, filing, store_raw: bool = True, store_text: bool = True):
+def create_filing_documents(client, documents, filing, store_raw: bool = False, store_text: bool = True):
     """
     Create filing document records given a list of documents
     and a filing record.
@@ -95,6 +95,7 @@ def create_filing_documents(client, documents, filing, store_raw: bool = True, s
             logger.info("- Starting to process store_raw...")
             raw_path = pathlib.Path(S3_DOCUMENT_PATH, "raw", document["sha1"]).as_posix()
             if not client.path_exists(raw_path):
+                logger.info("-- Starting to process store_raw... raw_path={}".format(raw_path))
                 client.put_buffer(raw_path, document["content"])
                 logger.info("Uploaded raw file for filing={0}, sequence={1}, sha1={2}"
                             .format(filing, document["sequence"], document["sha1"]))
@@ -192,7 +193,7 @@ def create_filing_error(row, filing_path: str):
 
 @shared_task
 def process_filing_index(client_type: str, file_path: str, filing_index_buffer: Union[str, bytes] = None,
-                         form_type_list: Iterable[str] = None, store_raw: bool = False, store_text: bool = False):
+                         form_type_list: Iterable[str] = None, store_raw: bool = False, store_text: bool = True):
     """
     Process a filing index from an S3 path or buffer.
     :param file_path: S3 or local path to process; if filing_index_buffer is none, retrieved from here
@@ -230,7 +231,7 @@ def process_filing_index(client_type: str, file_path: str, filing_index_buffer: 
         # Check for form type whitelist
         if form_type_list is not None:
             if row["Form Type"] not in form_type_list:
-                logger.info("Skipping filing {0} with form type {1}...".format(row["File Name"], row["Form Type"]))
+                # logger.info("Skipping filing {0} with form type {1}...".format(row["File Name"], row["Form Type"]))
                 continue
 
         # Cleanup path
@@ -308,7 +309,7 @@ def process_filing_index(client_type: str, file_path: str, filing_index_buffer: 
 
 @shared_task
 def process_filing(client, file_path: str, filing_buffer: Union[str, bytes] = None, store_raw: bool = False,
-                   store_text: bool = False):
+                   store_text: bool = True):
     """
     Process a filing from a path or filing buffer.
     :param file_path: path to process; if filing_buffer is none, retrieved from here
@@ -360,19 +361,21 @@ def process_filing(client, file_path: str, filing_buffer: Union[str, bytes] = No
             company_info.company = company
             company_info.name = filing_data["company_name"]
             company_info.sic = filing_data["sic"]
+            company_info.sic_code = filing_data["sic_code"]
+            company_info.irs_number = filing_data["irs_number"]
+            company_info.fiscal_year_end = filing_data["fiscal_year_end"]
             company_info.state_incorporation = filing_data["state_incorporation"]
             company_info.state_location = filing_data["state_location"]
             company_info.date = filing_data["date_filed"].date() if isinstance(filing_data["date_filed"],
                                                                                datetime.datetime) else \
                 filing_data["date_filed"]
-            company_info.business_street  = filing_data["business_street"]
-            company_info.business_city   = filing_data["business_city"]
-            company_info.business_state   = filing_data["business_state"]
-            company_info.business_zip   = filing_data["business_zip"]
-            company_info.business_phone   = filing_data["business_phone"]
-            company_info.former_name    = filing_data["former_name"]
-            company_info.former_name_date    = filing_data["former_name_date"].date() if isinstance(filing_data["former_name_date"], datetime.datetime) else \
-                filing_data["former_name_date"]
+            company_info.business_street = filing_data["business_street"]
+            company_info.business_city = filing_data["business_city"]
+            company_info.business_state = filing_data["business_state"]
+            company_info.business_zip = filing_data["business_zip"]
+            company_info.business_phone = filing_data["business_phone"]
+            company_info.former_name = filing_data["former_name"]
+            company_info.former_name_date = filing_data["former_name_date"]
             company_info.save()
 
             logger.info("Created new company info record.")
@@ -394,16 +397,19 @@ def process_filing(client, file_path: str, filing_buffer: Union[str, bytes] = No
                 company_info.company = company
                 company_info.name = filing_data["company_name"]
                 company_info.sic = filing_data["sic"]
+                company_info.sic_code = filing_data["sic_code"]
+                company_info.irs_number = filing_data["irs_number"]
+                company_info.fiscal_year_end = filing_data["fiscal_year_end"]
                 company_info.state_incorporation = filing_data["state_incorporation"]
                 company_info.state_location = filing_data["state_location"]
                 company_info.date = filing_data["date_filed"]
-                company_info.business_street  = filing_data["business_street"]
-                company_info.business_city   = filing_data["business_city"]
-                company_info.business_state   = filing_data["business_state"]
-                company_info.business_zip   = filing_data["business_zip"]
-                company_info.business_phone   = filing_data["business_phone"]
-                company_info.former_name    = filing_data["former_name"]
-                company_info.former_name_date    = filing_data["former_name_date"]
+                company_info.business_street = filing_data["business_street"]
+                company_info.business_city = filing_data["business_city"]
+                company_info.business_state = filing_data["business_state"]
+                company_info.business_zip = filing_data["business_zip"]
+                company_info.business_phone = filing_data["business_phone"]
+                company_info.former_name = filing_data["former_name"]
+                company_info.former_name_date = filing_data["former_name_date"]
                 company_info.save()
         except django.db.utils.IntegrityError:
             company = Company.objects.get(cik=filing_data["cik"])
@@ -429,8 +435,7 @@ def process_filing(client, file_path: str, filing_buffer: Union[str, bytes] = No
 
     # Create filing document records
     try:
-        #create_filing_documents(client, filing_data["documents"], filing, store_raw=store_raw, store_text=store_text)
-        create_filing_documents(client, filing_data["documents"], filing, store_raw=False, store_text=True)
+        create_filing_documents(client, filing_data["documents"], filing, store_raw=store_raw, store_text=store_text)
         filing.is_processed = True
         filing.is_error = False
         filing.save()
@@ -449,8 +454,6 @@ def extract_filing(client, file_path: str, filing_buffer: Union[str, bytes] = No
     :return:
     """
     # Get buffer
-
-
 
     if filing_buffer is None:
         logger.info("Retrieving filing buffer from S3...")

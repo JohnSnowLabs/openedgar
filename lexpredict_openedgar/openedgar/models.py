@@ -56,6 +56,9 @@ class CompanyInfo(django.db.models.Model):
     company = django.db.models.ForeignKey(Company, db_index=True, on_delete=django.db.models.CASCADE)
     name = django.db.models.CharField(max_length=1024, db_index=True)
     sic = django.db.models.CharField(max_length=1024, db_index=True, null=True)
+    sic_code = django.db.models.IntegerField(db_index=True, null=True)
+    irs_number = django.db.models.IntegerField(db_index=True, null=True)
+    fiscal_year_end = django.db.models.CharField(max_length=1024, null=True)
     state_location = django.db.models.CharField(max_length=32, db_index=True, null=True)
     state_incorporation = django.db.models.CharField(max_length=32, db_index=True, null=True)
     business_street = django.db.models.CharField(max_length=1024, null=True)
@@ -64,7 +67,7 @@ class CompanyInfo(django.db.models.Model):
     business_zip = django.db.models.CharField(max_length=1024, null=True)
     business_phone = django.db.models.CharField(max_length=1024, null=True)
     former_name = django.db.models.CharField(max_length=1024, null=True)
-    former_name_date = django.db.models.DateField(default=django.utils.timezone.now, db_index=True)
+    former_name_date = django.db.models.CharField(max_length=1024, null=True)
     date = django.db.models.DateField(default=django.utils.timezone.now, db_index=True)
 
     def __str__(self):
