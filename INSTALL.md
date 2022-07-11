@@ -28,7 +28,7 @@ After step 2, you will have 4 containers available. We need to get into the Open
    ```
    3) Parse them:
    ```
-   >>> process_all_filing_index(year=2018)
+   >>> process_all_filing_index(year=2018, store_raw=False, store_text=True) # To only store extracted text, not xmls
    ```
    Alternatively, you can parse specific document types:
    ```
