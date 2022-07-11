@@ -26,13 +26,13 @@ After step 2, you will have 4 containers available. We need to get into the Open
    ```
    >>> download_filing_index_data(year=2022)
    ```
-   3) Parse them:
+   3) Parse them (set store_raw=False and store_text=True to only store txt, and not other formats as xml)
    ```
-   >>> process_all_filing_index(year=2018, store_raw=False, store_text=True) # To only store extracted text, not xmls
+   >>> process_all_filing_index(year=2022, store_raw=False, store_text=True) 
    ```
    Alternatively, you can parse specific document types:
    ```
-   >>> process_all_filing_index(year=2018, form_type_list=["10-K"])
+   >>> process_all_filing_index(year=2022, store_raw=False, store_text=True, form_type_list=["10-K"])
    ```
 Check the Docker-compose logs to see the output of the processing step.
 
