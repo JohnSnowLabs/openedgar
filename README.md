@@ -10,8 +10,8 @@ OpenEDGAR is a comprehensive framework for building databases from EDGAR, and ca
 
 As with our pioneering [ContraxSuite](https://contraxsuite.com) contract analytics platform, OpenEDGAR is open source.  OpenEDGAR can be used freely under the [MIT License](LICENSE).
 
-# How to use OpenEDGAR
-* Docker Installation guide: [INSTALL.md](INSTALL.md)
+# Installing Open Edgar in Docker, by John Snow Labs
+Please follow Docker Installation guide: [INSTALL.md](INSTALL.md)
 
 # Related Information
 * Initial Website (seems discontinued): https://law.mit.edu/pub/openedgar/release/1 and https://github.com/LexPredict/openedgar
