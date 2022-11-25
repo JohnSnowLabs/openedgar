@@ -39,7 +39,11 @@ After step 2, you will have 4 containers available. We need to get into the Open
    ```
    process_all_filing_index(year=2022, store_raw=False, store_text=True, form_type_list=["10-K"], new_only=True)
    ```
-Check the Docker-compose logs to see the output of the processing step.
+Check the Docker-compose logs to see the output of the processing step using the following command:
+```
+sudo docker logs -f openedgar_openedgar_1
+```
+If the log is not showing anything new, then the processing has finished and you can proceed to retrieve your documents or results from database. 
 
 ## Sample times
 Sample timing on m5.large (2 core, 8GB RAM): ~24 hours to retrieve and parse all 2018 10-Ks
