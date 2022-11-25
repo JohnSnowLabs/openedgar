@@ -20,26 +20,30 @@ After step 2, you will have 4 containers available. We need to get into the Open
 3) Start OpenEdgar console: `bash start.sh`
     1) Import these libraries
    ```
-   >>> from openedgar.processes.edgar import download_filing_index_data, process_all_filing_index
+   from openedgar.processes.edgar import download_filing_index_data, process_all_filing_index
    ```
    2) Download all the filing documents from 2022 year using `year` parameter
    ```
-   >>> download_filing_index_data(year=2022)
+   download_filing_index_data(year=2022)
    ```
    3) Parse them (set `store_raw`False` and `store_text=True` to only store txt, and not other formats as xml)
    ```
-   >>> process_all_filing_index(year=2022, store_raw=False, store_text=True) 
+   process_all_filing_index(year=2022, store_raw=False, store_text=True) 
    ```
    Alternatively, you can parse specific document types with `form_type_list` parameter
    ```
-   >>> process_all_filing_index(year=2022, store_raw=False, store_text=True, form_type_list=["10-K"])
+   process_all_filing_index(year=2022, store_raw=False, store_text=True, form_type_list=["10-K"])
    ```
    4) If your work for any reason crashes, you can restore your work by starting from the last record obtained
    with the `new_only` parameter
    ```
-   >>> process_all_filing_index(year=2022, store_raw=False, store_text=True, form_type_list=["10-K"], new_only=True)
+   process_all_filing_index(year=2022, store_raw=False, store_text=True, form_type_list=["10-K"], new_only=True)
    ```
-Check the Docker-compose logs to see the output of the processing step.
+Check the Docker-compose logs to see the output of the processing step using the following command:
+```
+sudo docker logs -f openedgar_openedgar_1
+```
+If the log is not showing anything new, then the processing has finished and you can proceed to retrieve your documents or results from database. 
 
 ## Sample times
 Sample timing on m5.large (2 core, 8GB RAM): ~24 hours to retrieve and parse all 2018 10-Ks
