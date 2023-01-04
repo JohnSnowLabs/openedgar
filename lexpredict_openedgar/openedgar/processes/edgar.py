@@ -90,14 +90,15 @@ def download_filing_index_data(year: int = None):
 
         # Check if exists; download and upload to S3 if missing
         if not download_client.path_exists(file_path):
-            # Download
-            buffer, _ = openedgar.clients.edgar.get_buffer(filing_index_path)
-
-            # Upload
-            download_client.put_buffer(file_path, buffer)
-
-            logger.info("Retrieved {0} and uploaded to S3.".format(filing_index_path))
-            path_list.append((file_path, True, is_processed))
+            try:
+                # Download
+                buffer, _ = openedgar.clients.edgar.get_buffer(filing_index_path)
+                # Upload
+                download_client.put_buffer(file_path, buffer)
+                logger.info(f"Retrieved {0} and uploaded to S3.".format(filing_index_path))
+                path_list.append((file_path, True, is_processed))
+            except Exception as e:
+                logger.info(f"Unable to retrieve '{filing_index_path}', error: '{e}'. If 'Access denied accessing path' is raised, that means that specific filing index is not available. Usually that happens when it's being updated because it's the most recent one. If so, you can ignore this message")
         else:
             logger.info("Index {0} already exists on S3.".format(filing_index_path))
             path_list.append((file_path, False, is_processed))
